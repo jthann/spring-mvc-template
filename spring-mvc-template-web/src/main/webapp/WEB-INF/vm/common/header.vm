@@ -1,0 +1,22 @@
+<meta charset="UTF-8">
+<meta name="keywords"
+      content="">
+<meta name="description"
+      content="">
+<!-- 强制让文档宽度与设备宽度保持1:1 -->
+<!-- 文档最大宽度比例为1.0 -->
+<!-- 不允许用户点击屏幕放大浏览 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,  user-scalable=0"/>
+<!-- 忽略对电话号码识别 -->
+<!-- 忽略对email识别 -->
+<meta name="format-detection" content="telephone=no,email=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title></title>
+<link rel="shortcut icon" href="${pageBaseUrl}favicon.ico" mce_href="${pageBaseUrl}favicon.ico" type="image/x-icon">
+<script type="text/javascript">
+    var page_data = {
+        basePath: "$!pageBaseUrl",
+        staticPath: "$!resourceUrl"
+    }
+</script>

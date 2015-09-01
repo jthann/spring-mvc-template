@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="com.xxx.domain.User" alias="User"/>
+        <typeAlias type="com.xxx.domain.SliderVO" alias="SliderVO" />
+    </typeAliases>
+</configuration>

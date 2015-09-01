@@ -1,0 +1,15 @@
+#set( $base = $link.relative('test.vm').anchor('view') )
+<a href="$base.param('select','this')">this</a>
+<a href="$base.param('select','that')">that</a>
+
+#set( $list = [1..7] )
+#set( $others = [3..10] )
+#foreach( $item in $loop.watch($list).sync($others, 'other') )
+    $item -> $loop.other
+    #if( $item >= 5 )$loop.stop()#end
+#end
+
+$date.format($orderTime)
+<br>
+<br>
+$copyright

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+
+
+	<bean id="baseDataSource" class="org.apache.commons.dbcp.BasicDataSource" abstract="true" destroy-method="close" lazy-init="true">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="30" />
+		<property name="initialSize" value="3" />
+		<property name="timeBetweenEvictionRunsMillis" value="290000" />
+		<property name="minEvictableIdleTimeMillis" value="290000" />
+		<property name="numTestsPerEvictionRun" value="20" />
+	</bean>
+
+	<!-- DBCP config -->
+	<bean id="targetDataSource" parent="baseDataSource" lazy-init="true">
+		<property name="url" value="${jdbc.url}" />
+	</bean>
+
+	<bean id="lazyConnectionDataSourceProxy" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource" ref="targetDataSource" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref bean="targetDataSource" />
+		</property>
+	</bean>
+
+	<!-- mybatis config -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="targetDataSource" />
+		<property name="configLocation" value="classpath:sqlMapConfig.xml" />
+		<property name="mapperLocations" value="classpath*:sqlmap/**/*.xml" />
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+</beans>

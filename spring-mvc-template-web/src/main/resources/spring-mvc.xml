@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans.xsd
+					 http://www.springframework.org/schema/context 
+                     http://www.springframework.org/schema/context/spring-context.xsd
+                     http://www.springframework.org/schema/mvc
+                     http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                     http://www.springframework.org/schema/aop
+                     http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-autowire="byName">
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven />
+
+    <mvc:default-servlet-handler />
+
+    <context:component-scan base-package="com.xxx" >
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:important.properties</value>
+                <value>classpath:common.properties</value>
+            </list>
+        </property>
+    </bean>
+    <!--Velocity Template-->
+    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/WEB-INF/vm/" />
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="contentType">text/html;charset=UTF-8</prop>
+                <prop key="velocimacro.library">macro.vm</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+        <property name="layoutUrl" value="layout/default.vm" />
+        <property name="cache" value="false" />
+        <property name="suffix" value=".vm" />
+        <property name="exposeSpringMacroHelpers" value="true" />
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="dateToolAttribute" value="dateTool"/>
+        <property name="numberToolAttribute" value="numberTool"/>
+        <property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml"/>
+        <!--Map attributes exposed to vm-->
+        <property name="attributesMap">
+            <map>
+                <entry key="resourceUrl" value="${static.resource.url}"/>
+                <entry key="pageBaseUrl" value="${page.base.url}"/>
+            </map>
+        </property>
+        <property name="contentType" value="text/html;charset=UTF-8" />
+    </bean>
+
+    <!--i18n config-->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:i18n/messages</value>
+            </list>
+        </property>
+        <property name="cacheSeconds" value="-1"/>
+        <property name="useCodeAsDefaultMessage" value="false"/>
+    </bean>
+    <!--<bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver">-->
+        <!--<property name="defaultLocale" value="${locale.default}"/>-->
+    <!--</bean>-->
+    <!--
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="in"/>
+    </bean>
+    -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="in"/>
+        <property name="cookieName" value="local_lang"/>
+        <property name="cookieDomain" value="www.xxx.com"/>
+        <property name="cookiePath" value="/"/>
+        <!--Integer.MAX_VALUE-->
+        <property name="cookieMaxAge" value="2147483647"/>
+    </bean>
+
+    <!-- 文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"  >
+        <property name="defaultEncoding" value="UTF-8" />
+        <!--文件上传最大值 单位: byte 1048576为1兆。缺省设置10兆。-->
+        <property name="maxUploadSize" value="10485760"/>
+    </bean>
+
+    <!--全局异常处理Bean-->
+    <bean id="handlerExceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <!--根据不同的异常返回不同的视图-->
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Throwable">error/systemError</prop>
+            </props>
+        </property>
+        <!--根据不同的返回视图返回不同的状态码-->
+        <property name="statusCodes">
+            <props>
+                <prop key="/error/error">500</prop>
+            </props>
+        </property>
+        <!--默认返回的状态码-->
+        <property name="defaultStatusCode">
+            <value>500</value>
+        </property>
+        <!--发生异常时默认返回视图-->
+        <property name="defaultErrorView">
+            <value>error/error</value>
+        </property>
+        <!--异常日志打印-->
+        <property name="warnLogCategory">
+            <value>org.springframework.web.servlet.handler.SimpleMappingExceptionResolver</value>
+        </property>
+    </bean>
+
+
+    <!--需要过滤的请求参数列表 -->
+    <bean id="paramNameList" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <value>content</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!--字符过滤器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.xxx.web.interceptor.SecurityInterceptor">
+                <property name="paramNameList" ref="paramNameList"></property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+                <property name="paramName" value="lang"/>
+            </bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="jdIdLoginInterceptor" class="com.xxx.web.interceptor.LoginInterceptor">
+                <property name="anonymousCartCookieName" value="${anonymous.shoppingCart.cookieName}"/>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

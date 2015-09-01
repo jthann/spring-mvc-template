@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>spring-mvc-template</artifactId>
+        <groupId>com.xxx</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <groupId>com.xxx</groupId>
+    <artifactId>spring-mvc-template-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>spring-mvc-template-service</name>
+    <url>${project.url}</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.xxx</groupId>
+            <artifactId>spring-mvc-template-domain</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xxx</groupId>
+            <artifactId>spring-mvc-template-dao</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xxx</groupId>
+            <artifactId>spring-mvc-template-manager</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+    </dependencies>
+</project>

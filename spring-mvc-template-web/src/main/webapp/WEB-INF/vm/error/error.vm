@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    #parse("/common/header.vm")
+    <link rel="stylesheet" href="$resourceUrl/404-min.css">
+    #if($errorLog)
+        <script type="text/javascript">
+           var exLog = "$!errorLog";
+        </script>
+    #end
+</head>
+<body>
+<div class="viewport">
+    <header class="g-header">
+        #if($refererUrl)
+            <a href="$!refererUrl" class="i-goback J_goback"></a>
+        #else
+            <a href="javascript:window.history.go(-1);" class="i-goback J_goback"></a>
+        #end
+        <span class="title">#jdi18n("error")!</span>
+    </header>
+    <div class="not-found">
+        <i class="i-404"></i>
+
+        <p class="tip">
+            #jdi18n("system_error")!
+        </p>
+    </div>
+
+</div>
+    #googleAnalytics()
+</body>
+</html>

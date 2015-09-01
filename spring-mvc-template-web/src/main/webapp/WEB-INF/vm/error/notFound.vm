@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    #parse("/common/header.vm")
+</head>
+<body>
+<div class="viewport">
+	<header class="g-header">
+        <a href="javascript:window.history.go(-1);" class="i-goback J_goback"></a>
+	</header>
+    <div class="not-found">
+    </div>
+</div>
+    #googleAnalytics()
+</body>
+</html>
